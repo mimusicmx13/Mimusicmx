@@ -43,6 +43,10 @@ button,.boton{
     font-weight:bold;text-align:center;text-decoration:none;
     cursor:pointer
 }
+.boton-carpeta{
+    background:#1db954;
+    margin-top:20px
+}
 button:disabled{opacity:.5;cursor:not-allowed}
 .catalogo{
     display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -216,6 +220,15 @@ button:disabled{opacity:.5;cursor:not-allowed}
             personalizada al número de celular que registraste.
         </p>
         <p id="resumen"></p>
+
+        <a id="enlaceCarpetaDrive"
+           class="boton boton-carpeta"
+           href="https://drive.google.com/drive/folders/19o9asvAitiO6n8U_XbqKf4tF5JP3DSq5?usp=sharing"
+           target="_blank"
+           rel="noopener noreferrer"
+           onclick="registrarVisitaCarpeta()">
+           Ir a mi carpeta de Google Drive para descargar más temas
+        </a>
     </div>
 </section>
 
@@ -226,6 +239,9 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <script>
 const URL_SHEETS =
   "https://script.google.com/macros/s/AKfycbw6RCkazcibgNMfp0uDr_5HjtA7Y2tpFLhIp9lPYKsK39V1U9Qub3bjm3F83tfzPIJp7w/exec";
+
+const URL_CARPETA_DRIVE =
+  "https://drive.google.com/drive/folders/19o9asvAitiO6n8U_XbqKf4tF5JP3DSq5?usp=sharing";
 
 const pedido = {
     pedidoId: "MM-" + Date.now() + "-" +
@@ -277,7 +293,6 @@ document.getElementById("formRegistro")
 
     try {
         await enviarDatos({
-            evento: "Registro",
             pedidoId: pedido.pedidoId,
             nombre: pedido.nombre,
             celular: pedido.celular,
@@ -324,13 +339,12 @@ function seleccionar(nombre, boton) {
 
 function registrarDescarga(nombre) {
     enviarDatos({
-        evento: "Descarga solicitada",
         pedidoId: pedido.pedidoId,
         nombre: pedido.nombre,
         celular: pedido.celular,
         cancion1: pedido.canciones[0] || "",
         cancion2: pedido.canciones[1] || "",
-        estado: "Descarga solicitada"
+        estado: "Descarga solicitada (" + nombre + ")"
     }).catch(() => {});
 }
 
@@ -338,7 +352,6 @@ function mostrarHistoria() {
     if (pedido.canciones.length !== 2) return;
 
     enviarDatos({
-        evento: "Dos temas seleccionados",
         pedidoId: pedido.pedidoId,
         nombre: pedido.nombre,
         celular: pedido.celular,
@@ -348,6 +361,21 @@ function mostrarHistoria() {
     }).catch(() => {});
 
     mostrar("historia");
+}
+
+function registrarVisitaCarpeta() {
+    enviarDatos({
+        pedidoId: pedido.pedidoId,
+        nombre: pedido.nombre,
+        celular: pedido.celular,
+        cancion1: pedido.canciones[0] || "",
+        cancion2: pedido.canciones[1] || "",
+        historia: pedido.dedicatoria || pedido.historia
+            ? "Dedicatoria: " + pedido.dedicatoria + " | Historia: " + pedido.historia
+            : "",
+        estilo: pedido.estilo,
+        estado: "Abrió carpeta Drive"
+    }).catch(() => {});
 }
 
 document.getElementById("formHistoria")
@@ -362,16 +390,18 @@ document.getElementById("formHistoria")
     boton.disabled = true;
     boton.textContent = "Enviando...";
 
+    const historiaCompleta =
+        "Dedicatoria: " + pedido.dedicatoria +
+        " | Historia: " + pedido.historia;
+
     try {
         await enviarDatos({
-            evento: "Pedido de canción personalizada",
             pedidoId: pedido.pedidoId,
             nombre: pedido.nombre,
             celular: pedido.celular,
             cancion1: pedido.canciones[0],
             cancion2: pedido.canciones[1],
-            historia: pedido.historia,
-            dedicatoria: pedido.dedicatoria,
+            historia: historiaCompleta,
             estilo: pedido.estilo,
             estado: "Pendiente"
         });
