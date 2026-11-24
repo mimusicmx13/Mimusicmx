@@ -35,7 +35,7 @@ input,select,textarea{
     border:1px solid #444;background:#101018;
     color:white;font-size:16px
 }
-textarea{min-height:130px;resize:vertical}
+textarea{min-height:180px;resize:vertical}
 button,.boton{
     display:block;width:100%;padding:14px;
     margin-top:15px;border:0;border-radius:9px;
@@ -67,9 +67,9 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="caja">
         <h1>¡Bienvenido a MiMusicmx!</h1>
         <p>
-            Registra tus datos para entrar al catálogo de música,
-            descargar tus temas desde Google Drive y solicitar
-            tu canción personalizada gratis.
+            Registra tus datos para entrar al catálogo,
+            descargar música desde Google Drive y crear
+            tu canción personalizada.
         </p>
 
         <form id="formRegistro">
@@ -92,10 +92,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
     </div>
 </section>
 
-<!-- PASO 2: CATÁLOGO DE MÚSICA -->
+<!-- PASO 2: CATÁLOGO Y CREAR TU CANCIÓN -->
 <section id="catalogo" class="pantalla">
     <div class="caja">
-        <h1>Catálogo de música</h1>
+        <h1>Catálogo</h1>
         <p>
             Presiona «Descargar música» para ir directamente a
             Google Drive y descargar los temas que quieras.
@@ -108,20 +108,13 @@ button:disabled{opacity:.5;cursor:not-allowed}
            onclick="registrarDescargaDrive()">
            Descargar música
         </a>
-
-        <button type="button" onclick="mostrarHistoria()">
-            Continuar a mi canción gratis
-        </button>
     </div>
-</section>
 
-<!-- PASO 3: HISTORIA -->
-<section id="historia" class="pantalla">
     <div class="caja">
-        <h1>Tu canción personalizada</h1>
+        <h2>Crear tu canción</h2>
         <p>
-            Ahora cuéntanos qué canción quieres que creemos
-            especialmente para ti.
+            Cuéntanos a quién va dedicada, el estilo musical
+            y escribe tu historia en el cuadro de abajo.
         </p>
 
         <form id="formHistoria">
@@ -131,22 +124,29 @@ button:disabled{opacity:.5;cursor:not-allowed}
             <input id="dedicatoria" name="dedicatoria"
                    placeholder="Nombre o dedicatoria" required>
 
-            <label for="estilo">Estilo musical</label>
+            <label for="estilo">Estilo o género musical</label>
             <select id="estilo" name="estilo" required>
-                <option value="">Elige un estilo</option>
+                <option value="">Elige un estilo o género</option>
                 <option>Balada romántica</option>
                 <option>Rap mexicano</option>
+                <option>Rap callejero</option>
                 <option>Norteño</option>
+                <option>Banda / Regional mexicano</option>
                 <option>Cumbia</option>
                 <option>Pop</option>
+                <option>Reggaetón / Urbano</option>
+                <option>Corridos</option>
+                <option>Sierreño</option>
+                <option>Rock / Alternativo</option>
+                <option>Electrónica</option>
                 <option>Otro</option>
             </select>
 
             <label for="relato">
-                Cuéntanos tu historia o mensaje
+                Escribe aquí tu historia o mensaje
             </label>
             <textarea id="relato" name="historia"
-                placeholder="Escribe aquí tu historia..."
+                placeholder="Escribe aquí toda tu historia, detalles o mensaje para tu canción..."
                 maxlength="5000" required></textarea>
 
             <button type="submit">
@@ -259,14 +259,6 @@ function registrarDescargaDrive() {
     enviarDatos({
         estado: "Abrió Drive para descargar música"
     }).catch(() => {});
-}
-
-function mostrarHistoria() {
-    enviarDatos({
-        estado: "Esperando historia"
-    }).catch(() => {});
-
-    mostrar("historia");
 }
 
 document.getElementById("formHistoria")
