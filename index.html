@@ -45,21 +45,9 @@ button,.boton{
 }
 .boton-carpeta{
     background:#1db954;
-    margin-top:20px
+    margin-top:18px
 }
 button:disabled{opacity:.5;cursor:not-allowed}
-.catalogo{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px
-}
-.cancion{
-    background:#171722;padding:18px;
-    border:1px solid #303044;border-radius:13px
-}
-.cancion h3{margin:0 0 8px}
-.cancion p{font-size:13px;color:#aaa}
-.cancion.seleccionada{border:2px solid #a855f7}
-.estado{text-align:center;color:#ffd166}
 .aviso{font-size:12px;color:#aaa}
 #mensaje{text-align:center;color:#d8a5ff}
 </style>
@@ -79,9 +67,9 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="caja">
         <h1>¡Bienvenido a MiMusicmx!</h1>
         <p>
-            Registra tus datos para entrar al catálogo,
-            descargar dos canciones y solicitar tu canción
-            personalizada gratis.
+            Registra tus datos para entrar al catálogo de música,
+            descargar tus temas desde Google Drive y solicitar
+            tu canción personalizada gratis.
         </p>
 
         <form id="formRegistro">
@@ -99,72 +87,32 @@ button:disabled{opacity:.5;cursor:not-allowed}
         </form>
         <p class="aviso">
             Usaremos tus datos para registrar tu pedido
-            y enviarte las canciones que solicites.
+            y enviarte la canción que solicites.
         </p>
     </div>
 </section>
 
-<!-- PASO 2: CATÁLOGO -->
+<!-- PASO 2: CATÁLOGO DE MÚSICA -->
 <section id="catalogo" class="pantalla">
-    <h1>Elige tus dos canciones</h1>
-    <p class="estado" id="contador">Seleccionadas: 0 de 2</p>
-    <p>
-        Presiona «Seleccionar» en dos temas diferentes.
-        Después podrás descargarlos.
-    </p>
+    <div class="caja">
+        <h1>Catálogo de música</h1>
+        <p>
+            Presiona «Descargar música» para ir directamente a
+            Google Drive y descargar los temas que quieras.
+        </p>
 
-    <div class="catalogo">
+        <a class="boton boton-carpeta"
+           href="https://drive.google.com/drive/folders/19o9asvAitiO6n8U_XbqKf4tF5JP3DSq5?usp=sharing"
+           target="_blank"
+           rel="noopener noreferrer"
+           onclick="registrarDescargaDrive()">
+           Descargar música
+        </a>
 
-        <article class="cancion">
-            <h3>Mi Algún Día</h3>
-            <p>Balada romántica</p>
-            <button type="button"
-                onclick="seleccionar('Mi Algún Día',this)">
-                Seleccionar
-            </button>
-            <a class="boton" hidden
-               href="URL_MP3_CANCION_1"
-               download="Mi-Algún-Día.mp3"
-               onclick="registrarDescarga('Mi Algún Día')">
-               Descargar
-            </a>
-        </article>
-
-        <article class="cancion">
-            <h3>Dónde Están</h3>
-            <p>Rap mexicano</p>
-            <button type="button"
-                onclick="seleccionar('Dónde Están',this)">
-                Seleccionar
-            </button>
-            <a class="boton" hidden
-               href="URL_MP3_CANCION_2"
-               download="Donde-Estan.mp3"
-               onclick="registrarDescarga('Dónde Están')">
-               Descargar
-            </a>
-        </article>
-
-        <article class="cancion">
-            <h3>Cómo Que Ya No Quieren</h3>
-            <p>Rap callejero</p>
-            <button type="button"
-                onclick="seleccionar('Cómo Que Ya No Quieren',this)">
-                Seleccionar
-            </button>
-            <a class="boton" hidden
-               href="URL_MP3_CANCION_3"
-               download="Como-Que-Ya-No-Quieren.mp3"
-               onclick="registrarDescarga('Cómo Que Ya No Quieren')">
-               Descargar
-            </a>
-        </article>
-
+        <button type="button" onclick="mostrarHistoria()">
+            Continuar a mi canción gratis
+        </button>
     </div>
-
-    <button id="continuar" disabled onclick="mostrarHistoria()">
-        Continuar a mi canción gratis
-    </button>
 </section>
 
 <!-- PASO 3: HISTORIA -->
@@ -172,7 +120,6 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="caja">
         <h1>Tu canción personalizada</h1>
         <p>
-            ¡Ya elegiste tus dos canciones!
             Ahora cuéntanos qué canción quieres que creemos
             especialmente para ti.
         </p>
@@ -216,19 +163,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
         <p>
             Gracias por elegir MiMusicmx.
             Revisaremos tu historia y prepararemos tu canción.
-            Te enviaremos tus dos temas elegidos y tu canción
-            personalizada al número de celular que registraste.
+            Te enviaremos tu canción personalizada al número de
+            celular que registraste.
         </p>
         <p id="resumen"></p>
-
-        <a id="enlaceCarpetaDrive"
-           class="boton boton-carpeta"
-           href="https://drive.google.com/drive/folders/19o9asvAitiO6n8U_XbqKf4tF5JP3DSq5?usp=sharing"
-           target="_blank"
-           rel="noopener noreferrer"
-           onclick="registrarVisitaCarpeta()">
-           Ir a mi carpeta de Google Drive para descargar más temas
-        </a>
     </div>
 </section>
 
@@ -240,12 +178,17 @@ button:disabled{opacity:.5;cursor:not-allowed}
 const URL_SHEETS =
   "https://script.google.com/macros/s/AKfycbxnrn3zedAB2kL8kQzTVTLLp3Y8_jw2tkZaok226mIZsgUlEOHaFZ3UeJ-NG982Vq0/exec";
 
+const track = [
+    "Mi Algún Día",
+    "Dónde Están",
+    "Cómo Que Ya No Quieren"
+];
+
 const pedido = {
     pedidoId: "MM-" + Date.now() + "-" +
         Math.random().toString(36).slice(2,8),
     nombre: "",
     celular: "",
-    canciones: [],
     historia: "",
     dedicatoria: "",
     estilo: ""
@@ -312,68 +255,18 @@ document.getElementById("formRegistro")
     }
 });
 
-function seleccionar(nombre, boton) {
-    if (pedido.canciones.includes(nombre)) {
-        pedido.canciones = pedido.canciones.filter(x => x !== nombre);
-        boton.textContent = "Seleccionar";
-        boton.closest(".cancion").classList.remove("seleccionada");
-    } else {
-        if (pedido.canciones.length >= 2) {
-            alert("Solo puedes elegir dos canciones.");
-            return;
-        }
-
-        pedido.canciones.push(nombre);
-        boton.textContent = "Seleccionada";
-        boton.closest(".cancion").classList.add("seleccionada");
-    }
-
-    document.getElementById("contador").textContent =
-        "Seleccionadas: " + pedido.canciones.length + " de 2";
-
-    document.getElementById("continuar").disabled =
-        pedido.canciones.length !== 2;
-
-    document.querySelectorAll(".cancion").forEach(card => {
-        const titulo = card.querySelector("h3").textContent;
-        const enlace = card.querySelector("a");
-
-        enlace.hidden = !pedido.canciones.includes(titulo);
-    });
-}
-
-function registrarDescarga(nombre) {
+function registrarDescargaDrive() {
     enviarDatos({
-        cancion1: pedido.canciones[0] || "",
-        cancion2: pedido.canciones[1] || "",
-        estado: "Descarga solicitada (" + nombre + ")"
+        estado: "Abrió Drive para descargar música"
     }).catch(() => {});
 }
 
 function mostrarHistoria() {
-    if (pedido.canciones.length !== 2) return;
-
     enviarDatos({
-        cancion1: pedido.canciones[0],
-        cancion2: pedido.canciones[1],
         estado: "Esperando historia"
     }).catch(() => {});
 
     mostrar("historia");
-}
-
-function registrarVisitaCarpeta() {
-    const historiaArmada = (pedido.dedicatoria || pedido.historia)
-        ? "Dedicatoria: " + pedido.dedicatoria + " | Historia: " + pedido.historia
-        : "";
-
-    enviarDatos({
-        cancion1: pedido.canciones[0] || "",
-        cancion2: pedido.canciones[1] || "",
-        historia: historiaArmada,
-        estilo: pedido.estilo,
-        estado: "Abrió carpeta Drive"
-    }).catch(() => {});
 }
 
 document.getElementById("formHistoria")
@@ -394,16 +287,14 @@ document.getElementById("formHistoria")
 
     try {
         await enviarDatos({
-            cancion1: pedido.canciones[0],
-            cancion2: pedido.canciones[1],
             historia: historiaCompleta,
             estilo: pedido.estilo,
             estado: "Pendiente"
         });
 
         document.getElementById("resumen").textContent =
-            "Tus canciones elegidas: " +
-            pedido.canciones.join(" y ") + ".";
+            "Dedicatoria: " + pedido.dedicatoria +
+            " — Estilo: " + pedido.estilo + ".";
 
         mostrar("confirmacion");
 
